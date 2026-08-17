@@ -1,45 +1,58 @@
 # 🛡️ Ransomware Detection Framework
 
-A Python-based defensive cybersecurity framework designed to detect ransomware-like file activity by combining multiple behavioral and file-based detection signals.
+A Python-based defensive cybersecurity framework designed to detect suspicious file-system behavior associated with ransomware activity.
 
-**Developed by: MUZAFFAR MUSHTAQ**
+The framework combines multiple detection signals including:
+
+- File entropy analysis
+- Mass file activity detection
+- Suspicious file-extension detection
+- Risk scoring
+- File-system monitoring
+- Security event logging
+
+Developed by **MUZAFFAR MUSHTAQ**.
 
 ---
 
 ## 1. 📌 Project Overview
 
-The Ransomware Detection Framework is an educational and defensive cybersecurity project that monitors file activity and analyzes suspicious indicators commonly associated with ransomware-like behavior.
+The Ransomware Detection Framework is an educational and defensive cybersecurity project that monitors file-system activity and identifies suspicious behavior.
 
-The framework combines multiple signals instead of depending on a single detection method.
+Instead of relying on a single detection method, the framework combines multiple indicators to improve detection confidence.
 
-The main detection signals include:
+The main detection signals are:
 
-- File creation and modification events
-- File entropy
-- Suspicious file extensions
-- Mass file activity
-- Risk scoring
-- Risk-level classification
-- Security event logging
+1. High file entropy
+2. Suspicious file extensions
+3. Mass file activity
 
-The framework is designed for controlled laboratory testing and cybersecurity education.
+These signals are combined by the Risk Engine to produce a numerical risk score and risk level.
+
+### Risk Levels
+
+| Risk Score | Risk Level |
+|---:|---|
+| 0–29 | LOW |
+| 30–69 | MEDIUM |
+| 70–100 | CRITICAL |
 
 ---
 
-## 2. 🚀 Key Features
+## 2. 🎯 Project Objectives
 
-The framework provides the following capabilities:
+The main objectives of this project are:
 
-- Real-time file-system monitoring
-- Shannon entropy analysis
-- Suspicious extension detection
-- Mass file activity detection
-- Multi-signal risk scoring
-- Risk classification
-- Detection event logging
-- Configurable thresholds
-- Safe test-file based validation
-- Modular Python architecture
+- Learn defensive ransomware detection techniques
+- Monitor file-system activity
+- Analyze file entropy
+- Detect suspicious file extensions
+- Detect mass file activity
+- Combine multiple security indicators
+- Generate risk scores
+- Log security events
+- Build a modular Python security framework
+- Practice Linux and Git/GitHub development
 
 ---
 
@@ -67,7 +80,7 @@ The framework follows a modular detection architecture:
              ▼                 ▼                 ▼
       ┌─────────────┐   ┌─────────────┐   ┌─────────────┐
       │   Entropy   │   │   Activity  │   │  Extension  │
-      │   Analyzer  │   │   Detector  │   │  Detector   │
+      │   Analyzer  │   │   Detector   │   │  Detector   │
       └──────┬──────┘   └──────┬──────┘   └──────┬──────┘
              │                 │                 │
              └─────────────────┼─────────────────┘
@@ -85,40 +98,42 @@ The framework follows a modular detection architecture:
                     ┌──────────────────────┐
                     │       Logger         │
                     └──────────────────────┘
-
-4. 🔍 Detection Components
+4.## 🔍 Detection Components
 
 The framework consists of several independent components that work together.
 
-Main Components
 Component	Purpose
 File Monitor	Watches the monitored directory
 Entropy Analyzer	Measures file randomness
 Activity Detector	Detects mass file activity
 Extension Detector	Identifies suspicious extensions
 Detection Engine	Combines detection signals
-Risk Engine	Calculates risk score
+Risk Engine	Calculates the final risk score
 Logger	Records security events
 Configuration	Stores configurable settings
-5. 📊 Entropy Analyzer
+
+The components are implemented as separate Python modules to keep the framework modular and easier to maintain.
+
+5. ##📊 Entropy Analyzer
 
 The entropy analyzer calculates the Shannon entropy of a file.
 
 Entropy measures how random the data inside a file appears to be.
 
-A higher entropy value can be associated with encrypted or compressed data.
+Higher entropy can be associated with encrypted or compressed data.
 
-The framework uses a default threshold of:
+The framework uses the following default threshold:
 
 7.5
+Normal File Example
 
-Example:
+A normal text file produced a relatively low entropy value:
 
-Normal text file:
 entropy = 3.8389
 high_entropy = False
+High-Entropy Test Example
 
-Example of high-entropy test data:
+A controlled high-entropy test file produced:
 
 entropy = 7.9568
 high_entropy = True
@@ -135,26 +150,25 @@ Default configuration:
 Activity threshold: 20 files
 Time window: 10 seconds
 
-If a large number of unique files are modified or created within the configured window, the framework marks the activity as suspicious.
+If a large number of unique files are created or modified within the configured time window, the framework marks the activity as suspicious.
 
-Example:
+Normal Activity
+unique_files = 1
+mass_activity = False
+Suspicious Mass Activity
 
-unique_files: 1
-mass_activity: False
+During the combined detection test, the framework detected:
 
-Suspicious mass activity example:
-
-mass_activity: True
+mass_activity = True
 
 The activity detector is implemented in:
 
 src/activity_detector.py
 7. 🔐 Extension Detector
 
-The extension detector checks whether a file uses an extension that has been configured as suspicious.
+The extension detector checks whether a file uses an extension configured as suspicious.
 
-Example test:
-
+Test Examples
 document.txt       → suspicious=False
 important.locked   → suspicious=True
 backup.encrypted   → suspicious=True
@@ -162,33 +176,28 @@ backup.encrypted   → suspicious=True
 The extension detector is implemented in:
 
 src/extension_detector.py
-
-Example command:
-
+Test Command
 python src/extension_detector.py
-
-Example output:
-
+Expected Output
 ----- EXTENSION DETECTOR TEST -----
 document.txt | extension=.txt | suspicious=False
 important.locked | extension=.locked | suspicious=True
 backup.encrypted | extension=.encrypted | suspicious=True
 8. ⚖️ Risk Engine
 
-The risk engine combines detection signals into a numerical risk score.
+The risk engine combines the detection signals into a numerical risk score.
 
-The current scoring model uses:
+The current scoring model is:
 
-Suspicious extension → +20
-High entropy         → +30
-Mass file activity   → +40
+Detection Signal	Score
+Suspicious Extension	+20
+High Entropy	+30
+Mass File Activity	+40
 
-The maximum score is:
+The maximum theoretical score is:
 
 100
-
-Example:
-
+Example
 Suspicious extension = 20
 High entropy         = 30
 Mass activity        = 40
@@ -209,28 +218,24 @@ Validates the file
 Records file activity
 Calculates entropy
 Checks suspicious characteristics
-Calculates risk score
-Determines risk level
+Calculates the risk score
+Determines the risk level
 Returns the detection result
 
 The detection engine is implemented in:
 
 src/detector.py
-
-Example normal result:
-
-{
-    'file': 'data/detection_test.txt',
-    'event_type': 'modified',
-    'entropy': 3.8389,
-    'high_entropy': False,
-    'unique_files': 1,
-    'mass_activity': False,
-    'extension': '.txt',
-    'suspicious_extension': False,
-    'risk_score': 0,
-    'risk_level': 'LOW'
-}
+Example Normal Result
+file: data/detection_test.txt
+event_type: modified
+entropy: 3.8389
+high_entropy: False
+unique_files: 1
+mass_activity: False
+extension: .txt
+suspicious_extension: False
+risk_score: 0
+risk_level: LOW
 10. 👁️ File Monitor
 
 The file monitor watches the configured directory for file-system activity.
@@ -240,7 +245,9 @@ It detects events such as:
 created
 modified
 
-When an event occurs, the file is passed to the detection engine.
+When a file-system event occurs, the file is passed to the detection engine.
+
+The detection engine then analyzes the file and generates a risk result.
 
 The file monitor is implemented in:
 
@@ -266,15 +273,23 @@ src/logger.py
 Runtime logs are stored under:
 
 results/
+
+The project excludes runtime log files from Git tracking through .gitignore.
+
 12. ⚙️ Configuration
 
 Project configuration is stored in:
 
 config/config.yaml
 
-Important configurable values include detection thresholds and monitoring settings.
+Important configurable values include:
 
-Example conceptual configuration:
+Entropy threshold
+Activity threshold
+Monitoring time window
+Monitoring settings
+
+Example configuration:
 
 entropy_threshold: 7.5
 activity_threshold: 20
@@ -284,10 +299,8 @@ Configuration allows detection behavior to be adjusted without changing the main
 
 13. 📥 Installation
 Clone the Repository
-git clone <YOUR_GITHUB_REPOSITORY_URL>
-
-Enter the project directory:
-
+git clone https://github.com/mushtaqmuzaffar875-a11y/Ransomware-Detection-Framework.git
+Enter the Project Directory
 cd ransomware-detection-framework
 Create Virtual Environment
 python3 -m venv venv
@@ -295,7 +308,7 @@ Activate Virtual Environment
 source venv/bin/activate
 Install Dependencies
 
-If the project contains a requirements file:
+If a requirements.txt file is available:
 
 pip install -r requirements.txt
 14. ▶️ Running the Framework
@@ -381,15 +394,15 @@ risk_score: 50
 risk_level: MEDIUM
 16. 🔬 Combined Detection Test
 
-The framework was tested using multiple harmless test files with several suspicious indicators.
+The framework was tested using multiple harmless test files containing several suspicious indicators.
 
 The combined test included:
 
-Suspicious extension
-+
-High entropy
-+
-Mass file activity
+Suspicious Extension
+        +
+High Entropy
+        +
+Mass File Activity
 
 The framework detected the combined behavior with a high risk score.
 
@@ -404,7 +417,7 @@ Example detection output:
 
 [DETECTION] CREATED  | Risk: CRITICAL | Score: 90/100
 
-and:
+Modified event:
 
 [DETECTION] MODIFIED | Risk: CRITICAL | Score: 90/100
 
@@ -523,17 +536,18 @@ Detection Signal	Score
 Suspicious Extension	+20
 High Entropy	+30
 Mass File Activity	+40
-
-Example calculations:
-
-No suspicious indicators:
+No Suspicious Indicators
 0 + 0 + 0 = 0
-Suspicious extension:
+Suspicious Extension
 20 + 0 + 0 = 20
-Suspicious extension + high entropy:
+Suspicious Extension + High Entropy
 20 + 30 + 0 = 50
-Suspicious extension + high entropy + mass activity:
+Suspicious Extension + High Entropy + Mass Activity
 20 + 30 + 40 = 90
+Risk Classification
+0–29   → LOW
+30–69  → MEDIUM
+70–100 → CRITICAL
 19. 🚨 Example Detection Logs
 Medium Risk
 INFO | DETECTION |
@@ -706,17 +720,17 @@ The Ransomware Detection Framework demonstrates how multiple security signals ca
 The framework analyzes:
 
 File Activity
-     ↓
+      ↓
 Entropy
-     ↓
+      ↓
 File Extension
-     ↓
+      ↓
 Mass Activity
-     ↓
+      ↓
 Risk Score
-     ↓
+      ↓
 Risk Level
-     ↓
+      ↓
 Security Log
 
 Example:
@@ -752,5 +766,4 @@ Tested components:
 [✓] Critical Risk Detection
 
 Developed by MUZAFFAR MUSHTAQ
-
 
