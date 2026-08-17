@@ -1,0 +1,17 @@
+venv/
+__pycache__/
+*.pyc
+.pytest_cache/
+results/*.log
+.env
+.DS_Store
+
+# Generated test artifacts
+data/mass_test_*.txt
+data/detection_test.txt
+data/high_entropy_test.locked
+data/test_document.locked
+data/combined_test/
+
+# Backup files
+*.backup

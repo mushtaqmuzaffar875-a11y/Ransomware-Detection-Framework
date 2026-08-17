@@ -1,0 +1,2 @@
+Safe ransomware detection test file 3
+Safe simulated activity.

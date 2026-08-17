@@ -1,0 +1,18 @@
+monitor:
+  interval: 1
+  recursive: true
+
+detection:
+  entropy_threshold: 7.5
+  mass_change_threshold: 20
+  time_window_seconds: 10
+
+risk:
+  low: 25
+  medium: 50
+  high: 75
+  critical: 90
+
+logging:
+  level: INFO
+  file: results/ransomware_detection.log
